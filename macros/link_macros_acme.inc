@@ -1,14 +1,22 @@
 		!macro link_decomp_under_io {
-			dec $01                         ;bank out IO
+			lda $01
+			pha
+			lda #$34
+			sta $01                         ;bank out IO
 			jsr link_decomp                 ;depack
-			inc $01
+			pla
+			sta $01
 		}
 
 		!macro link_load_next_raw_decomp {
 			jsr link_load_next_raw
-			dec $01                         ;bank out IO
+			lda $01
+			pha
+			lda #$34
+			sta $01                         ;bank out IO
 			jsr link_decomp                 ;depack
-			inc $01
+			pla
+			sta $01
 		}
 
 		;load next file as a raw file (do not decomp on the fly) and jump to .addr
@@ -41,9 +49,13 @@
 		!macro link_load_next_double {
 			jsr link_load_next_comp
 			jsr link_load_next_raw
-			dec $01
+			lda $01
+			pha
+			lda #$34
+			sta $01
 			jsr link_decomp
-			inc $01
+			pla
+			sta $01
 		}
 
 		;link irq hook back to base irq

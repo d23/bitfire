@@ -16,7 +16,7 @@ HEADER:= zx0.h sfx.h
 all: zx0 dzx0
 
 zx0: $(SOURCE) $(HEADER)
-	@echo "Buidling zx0..."
+	@echo "Building zx0..."
 	$(VR)$(CC) $(zx0_CFLAGS) -o $@ $(SOURCE)
 
 dzx0: dzx0.c
@@ -26,11 +26,11 @@ sfx.h: sfx.asm
 	@#$(VR)$(ACME) $(ACME_OPTS) -l sau.lst --vicelabels $(basename $@).lst -o $(basename $@) $<
 	@#$(VR)grep 'ZX0' $(basename $@).lst | sed -E 's/al C:([0-9a-f]+)[[:space:]]\.(.*)/#define \2 0x\1/' >> $@
 	$(VR)$(ACME) $(ACME_OPTS) -l $(basename $@).lst -o $(basename $@) $<
-	$(VR)grep 'ZX0' $(basename $@).lst | sed -e 's/[[:space:]]*;[[:space:]]*.*//g' -e 's/\s*//g' -e 's/\=\$$/ 0x/g' -e 's/^/#define /' > $@
+	$(VR)grep 'ZX0' $(basename $@).lst | sed -e 's/;[[:space:]]*.*//g' -e 's/[[:space:]]*//g' -e 's/\=\$$/ 0x/g' -e 's/^/#define /' > $@
 	$(VR)echo 'static const char decruncher[] = {' >> $@
-	$(VR)hexdump -ve '1/1 "0x%.2x,"' $(basename $@) | sed -e 's/,$$/\n/g' -e 's/.\{50\}/&\n/g' | sed 's/^/&    /g' >> $@
+	$(VR)hexdump -ve '1/1 "0x%.2x,"' $(basename $@) | sed -e $$'s/,$$/\\\n/g' | sed 's/^/&    /g' >> $@
 	$(VR)echo '};' >> $@
-	$(VR)rm $(basename $@).lst sfx
+	@#$(VR)rm $(basename $@).lst sfx
 
 clean:
 	$(VR)-rm zx0 dzx0 sfx.h

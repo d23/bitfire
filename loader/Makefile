@@ -14,11 +14,11 @@ endif
 all: bitfire gcr_tables
 
 gcr_tables: gcr_tables.c
-	@echo "Buidling gcr table tool..."
+	@echo "Building gcr table tool..."
 	$(VR)$(CC) $< -o $@ $(loader_CFLAGS)
 
 resident: resident.asm ../config.inc constants.inc Makefile
-	@echo -n "Buidling resident part ->"
+	@echo -n "Building resident part ->"
 	$(VR)$(ACME) $(ACME_OPTS) -I ../../ -I ../ -o resident -l resident_labels.txt resident.asm
 	@printf " Size: $$%04x\n" $$((`wc -c < resident` - 2))
 	@echo "Creating loader_acme.inc..."

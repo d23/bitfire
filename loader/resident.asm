@@ -87,14 +87,18 @@ link_player
 			pha
 			txa
 			pha
-			inc $01				;should be save with $01 == $34/$35, except when music is @ >= $e000
+			lda $01				;should be save with $01 == $34/$35, except when music is @ >= $e000
+			pha
+			lda #$35
+			sta $01
 	!if CONFIG_FRAMEWORK_MUSIC_NMI = 1 {
 			lda $dd0d
 	} else {
 			dec $d019
-	}
+	}		
 			jsr link_music_play
-			dec $01
+			pla
+			sta $01
 
 			pla
 			tax
